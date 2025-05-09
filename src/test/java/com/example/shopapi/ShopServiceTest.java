@@ -49,43 +49,60 @@ class ShopServiceTest {
         
         // Setup test data
         banks = Arrays.asList(
-                new Bank(1L, "Al Rajhi Bank", "https://example.com/banks/al-rajhi.png"),
-                new Bank(2L, "SNB", "https://example.com/banks/snb.png")
+            Bank.builder()
+                .id(1L)
+                .name("Al Rajhi Bank")
+                .imageUrl("https://example.com/banks/al-rajhi.png")
+                .build(),
+            Bank.builder()
+                .id(2L)
+                .name("SNB")
+                .imageUrl("https://example.com/banks/snb.png")
+                .build()
         );
 
-        contact = new Contact(1L, "+966501234567", "+966501234567", 
-                           "@digitalbazaar", "@digitalbazaar_support");
+        contact = Contact.builder()
+            .id(1L)
+            .phone("+966501234567")
+            .whatsapp("+966501234567")
+            .instagram("@digitalbazaar")
+            .telegram("@digitalbazaar_support")
+            .build();
 
-        location = new Location(1L, 24.7136, 46.6753);
+        location = Location.builder()
+            .id(1L)
+            .lat(24.7136)
+            .lng(46.6753)
+            .build();
 
-        shop = new Shop(
-                "shop_12345",
-                "Digital Bazaar",
-                "A tech-focused store offering gadgets with cashless payment options.",
-                "Riyadh",
-                "Electronics",
-                "https://example.com/images/shops/digital-bazaar.jpg",
-                banks,
-                "09:00",
-                "22:00",
-                "open",
-                contact,
-                location
-        );
+        shop = Shop.builder()
+            .id("shop_12345")
+            .name("Digital Bazaar")
+            .description("A tech-focused store offering gadgets with cashless payment options.")
+            .city("Riyadh")
+            .category("Electronics")
+            .imageUrl("https://example.com/images/shops/digital-bazaar.jpg")
+            .banks(banks)
+            .openTime("09:00")
+            .closeTime("22:00")
+            .workStatus("open")
+            .contact(contact)
+            .location(location)
+            .build();
 
         shopDto = new ShopDto(
-                "shop_12345",
-                "Digital Bazaar",
-                "A tech-focused store offering gadgets with cashless payment options.",
-                "Riyadh",
-                "Electronics",
-                "https://example.com/images/shops/digital-bazaar.jpg",
-                banks.stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toList()),
-                "09:00",
-                "22:00",
-                "open",
-                testMapper.map(contact, ContactDto.class),
-                testMapper.map(location, LocationDto.class)
+            "shop_12345",
+            "Digital Bazaar",
+            "A tech-focused store offering gadgets with cashless payment options.",
+            "Riyadh",
+            "Electronics",
+            "https://example.com/images/shops/digital-bazaar.jpg",
+            banks.stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toList()),
+            "09:00",
+            "22:00",
+            "open",
+            testMapper.map(contact, ContactDto.class),
+            testMapper.map(location, LocationDto.class)
         );
     }
 
