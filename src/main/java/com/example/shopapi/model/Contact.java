@@ -1,10 +1,15 @@
 package com.example.shopapi.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Data
 @Builder
@@ -21,4 +26,6 @@ public class Contact {
     private String whatsapp;
     private String instagram;
     private String telegram;
+    private String createdAt;
+    private String updatedAt;
 }

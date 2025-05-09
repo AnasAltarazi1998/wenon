@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ShopRepository extends JpaRepository<Shop, String>, JpaSpecificationExecutor<Shop> {
+public interface ShopRepository extends JpaRepository<Shop, Long>, JpaSpecificationExecutor<Shop> {
     List<Shop> findByCity(String city);
     List<Shop> findByCategory(String category);
     List<Shop> findByWorkStatus(String workStatus);

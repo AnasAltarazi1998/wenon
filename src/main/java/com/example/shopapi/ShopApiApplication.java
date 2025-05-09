@@ -12,9 +12,6 @@ public class ShopApiApplication {
 		SpringApplication.run(ShopApiApplication.class, args);
 	}
 
-	@Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+
 
 }

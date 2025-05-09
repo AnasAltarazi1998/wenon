@@ -1,0 +1,64 @@
+{
+  "id": "shop-api-environment",
+  "name": "Shop API Environment",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "authToken",
+      "value": "your-user-jwt-token",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "adminAuthToken",
+      "value": "your-admin-jwt-token",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "basicAuth",
+      "value": "YWRtaW46YWRtaW4=",
+      "type": "secret",
+      "enabled": true,
+      "description": "Base64 encoded 'admin:admin'"
+    },
+    {
+      "key": "shopId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "bankId",
+      "value": "1",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "city",
+      "value": "New York",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "category",
+      "value": "RETAIL",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "workStatus",
+      "value": "OPEN",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2024-03-19T12:00:00.000Z",
+  "_postman_exported_using": "Postman/10.0.0"
+} 

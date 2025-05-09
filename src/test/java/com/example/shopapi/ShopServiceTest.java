@@ -15,10 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +35,7 @@ class ShopServiceTest {
 
     private Shop shop;
     private ShopDto shopDto;
-    private List<Bank> banks;
+    private Set<Bank> banks;
     private Contact contact;
     private Location location;
     private ModelMapper testMapper;
@@ -48,7 +45,7 @@ class ShopServiceTest {
         testMapper = new ModelMapper();
         
         // Setup test data
-        banks = Arrays.asList(
+        banks = new HashSet<>(Arrays.asList(
             Bank.builder()
                 .id(1L)
                 .name("Al Rajhi Bank")
@@ -59,7 +56,7 @@ class ShopServiceTest {
                 .name("SNB")
                 .imageUrl("https://example.com/banks/snb.png")
                 .build()
-        );
+        ));
 
         contact = Contact.builder()
             .id(1L)
@@ -76,13 +73,13 @@ class ShopServiceTest {
             .build();
 
         shop = Shop.builder()
-            .id("shop_12345")
+            .id(12345L)
             .name("Digital Bazaar")
             .description("A tech-focused store offering gadgets with cashless payment options.")
             .city("Riyadh")
             .category("Electronics")
             .imageUrl("https://example.com/images/shops/digital-bazaar.jpg")
-            .banks(banks)
+            .banks(new HashSet<>(banks))
             .openTime("09:00")
             .closeTime("22:00")
             .workStatus("open")
@@ -91,13 +88,13 @@ class ShopServiceTest {
             .build();
 
         shopDto = new ShopDto(
-            "shop_12345",
+            12345L,
             "Digital Bazaar",
             "A tech-focused store offering gadgets with cashless payment options.",
             "Riyadh",
             "Electronics",
             "https://example.com/images/shops/digital-bazaar.jpg",
-            banks.stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toList()),
+            banks.stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toSet()),
             "09:00",
             "22:00",
             "open",
@@ -109,7 +106,7 @@ class ShopServiceTest {
     @Test
     void getAllShops_ShouldReturnAllShops() {
         // Arrange
-        List<Shop> shops = Arrays.asList(shop);
+        List<Shop> shops = Collections.singletonList(shop);
         when(shopRepository.findAll()).thenReturn(shops);
         when(modelMapper.map(shop, ShopDto.class)).thenReturn(shopDto);
 
@@ -119,7 +116,7 @@ class ShopServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("shop_12345", result.get(0).getId());
+        assertEquals(12345L, result.get(0).getId());
         verify(shopRepository).findAll();
         verify(modelMapper).map(shop, ShopDto.class);
     }
@@ -141,11 +138,11 @@ class ShopServiceTest {
     @Test
     void getShopById_WhenExists_ShouldReturnShop() {
         // Arrange
-        when(shopRepository.findById("shop_12345")).thenReturn(Optional.of(shop));
+        when(shopRepository.findById(12345L)).thenReturn(Optional.of(shop));
         when(modelMapper.map(shop, ShopDto.class)).thenReturn(shopDto);
 
         // Act
-        ShopDto result = shopService.getShopById("shop_12345");
+        ShopDto result = shopService.getShopById(12345L);
 
         // Assert
         assertNotNull(result);
@@ -153,20 +150,20 @@ class ShopServiceTest {
         assertEquals("Riyadh", result.getCity());
         assertEquals("Electronics", result.getCategory());
         assertEquals("open", result.getWorkStatus());
-        verify(shopRepository).findById("shop_12345");
+        verify(shopRepository).findById(12345L);
         verify(modelMapper).map(shop, ShopDto.class);
     }
 
     @Test
     void getShopById_WhenNotExists_ShouldThrowException() {
         // Arrange
-        when(shopRepository.findById("non_existent")).thenReturn(Optional.empty());
+        when(shopRepository.findById(12345L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThrows(ResourceNotFoundException.class, () -> {
-            shopService.getShopById("non_existent");
+            shopService.getShopById(12345L);
         });
-        verify(shopRepository).findById("non_existent");
+        verify(shopRepository).findById(12345L);
     }
 
     @Test
@@ -284,7 +281,7 @@ class ShopServiceTest {
         assertEquals(shop.getOpenTime(), result.getOpenTime());
         assertEquals(shop.getCloseTime(), result.getCloseTime());
         assertEquals(shop.getWorkStatus(), result.getWorkStatus());
-        assertEquals(shop.getBanks().stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toList()), result.getBanks());
+        assertEquals(shop.getBanks().stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toSet()), result.getBanks());
         assertEquals(testMapper.map(shop.getContact(), ContactDto.class), result.getContact());
         assertEquals(testMapper.map(shop.getLocation(), LocationDto.class), result.getLocation());
         verify(modelMapper).map(shop, ShopDto.class);
@@ -309,7 +306,7 @@ class ShopServiceTest {
         assertEquals(shopDto.getOpenTime(), result.getOpenTime());
         assertEquals(shopDto.getCloseTime(), result.getCloseTime());
         assertEquals(shopDto.getWorkStatus(), result.getWorkStatus());
-        assertEquals(shopDto.getBanks(), result.getBanks().stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toList()));
+        assertEquals(shopDto.getBanks(), result.getBanks().stream().map(bank -> testMapper.map(bank, BankDto.class)).collect(Collectors.toSet()));
         assertEquals(shopDto.getContact(), testMapper.map(result.getContact(), ContactDto.class));
         assertEquals(shopDto.getLocation(), testMapper.map(result.getLocation(), LocationDto.class));
         verify(modelMapper).map(shopDto, Shop.class);

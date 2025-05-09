@@ -19,6 +19,8 @@ public class Location {
     
     private double lat;
     private double lng;
+    private String createdAt;
+    private String updatedAt;
 }
 
 

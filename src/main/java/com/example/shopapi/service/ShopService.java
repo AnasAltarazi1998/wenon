@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.example.shopapi.mapper.ShopMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,20 +18,22 @@ public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ModelMapper modelMapper;
+    private final ShopMapper shopMapper;
 
-    public ShopService(ShopRepository shopRepository, ModelMapper modelMapper) {
+    public ShopService(ShopRepository shopRepository, ModelMapper modelMapper,ShopMapper shopMapper) {
         this.shopRepository = shopRepository;
         this.modelMapper = modelMapper;
+        this.shopMapper = shopMapper;
     }
 
     public List<ShopDto> getAllShops() {
         log.info("Fetching all shops");
         return shopRepository.findAll().stream()
-                .map(this::convertToDto)
+                .map(shopMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    public ShopDto getShopById(String id) {
+    public ShopDto getShopById(Long id) {
         log.info("Fetching shop with id: {}", id);
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + id));

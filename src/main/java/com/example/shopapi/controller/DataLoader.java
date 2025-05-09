@@ -2,11 +2,12 @@ package com.example.shopapi.controller;
 
 import com.example.shopapi.model.*;
 import com.example.shopapi.repository.*;
-import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -31,25 +32,34 @@ public class DataLoader {
     @GetMapping("/loadTestData")
     public String loadTestData() {
         // Clear existing data
+        shopRepository.deleteAll();
         bankRepository.deleteAll();
         contactRepository.deleteAll();
         locationRepository.deleteAll();
         shopRepository.deleteAll();
 
+        String currentTime = LocalDateTime.now().toString();
+
         // Create and save locations
         Location riyadhLocation = locationRepository.save(Location.builder()
             .lat(24.7136)
             .lng(46.6753)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Location jeddahLocation = locationRepository.save(Location.builder()
             .lat(21.5433)
             .lng(39.1728)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Location dammamLocation = locationRepository.save(Location.builder()
             .lat(26.4207)
             .lng(50.0888)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         // Create and save contacts
@@ -59,6 +69,8 @@ public class DataLoader {
             .whatsapp("+966501234567")
             .instagram("@digitalbazaar")
             .telegram("@digitalbazaar_support")
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Contact techHubContact = contactRepository.save(Contact.builder()
@@ -67,6 +79,8 @@ public class DataLoader {
             .whatsapp("+966502345678")
             .instagram("@techhub")
             .telegram("@techhub_support")
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Contact gadgetWorldContact = contactRepository.save(Contact.builder()
@@ -75,11 +89,50 @@ public class DataLoader {
             .whatsapp("+966503456789")
             .instagram("@gadgetworld")
             .telegram("@gadgetworld_support")
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
-        // Create and save shops
+        // Create and save banks
+        Bank alRajhiBank = bankRepository.save(Bank.builder()
+            .name("Al Rajhi Bank")
+            .imageUrl("https://example.com/banks/al-rajhi.png")
+            .active(true)
+            .status("ACTIVE")
+            .createdAt(LocalDateTime.now().toString())
+            .updatedAt(LocalDateTime.now().toString())
+            .build());
+
+        Bank snbBank = bankRepository.save(Bank.builder()
+            .name("SNB")
+            .imageUrl("https://example.com/banks/snb.png")
+            .active(true)
+            .status("ACTIVE")
+            .createdAt(LocalDateTime.now().toString())
+            .updatedAt(LocalDateTime.now().toString())
+            .build());
+
+        Bank alinmaBank = bankRepository.save(Bank.builder()
+            .name("Alinma Bank")
+            .imageUrl("https://example.com/banks/alinma.png")
+            .active(true)
+            .status("ACTIVE")
+            .createdAt(LocalDateTime.now().toString())
+            .updatedAt(LocalDateTime.now().toString())
+            .build());
+
+        Bank alBiladBank = bankRepository.save(Bank.builder()
+            .name("Al Bilad Bank")
+            .imageUrl("https://example.com/banks/albilad.png")
+            .active(true)
+            .status("ACTIVE")
+            .createdAt(LocalDateTime.now().toString())
+            .updatedAt(LocalDateTime.now().toString())
+            .build());
+
+        // Create and save shops with their bank relationships
         Shop digitalBazaar = shopRepository.save(Shop.builder()
-            .id("shop_12345")
+            .id(12345L)
             .name("Digital Bazaar")
             .description("A tech-focused store offering gadgets with cashless payment options.")
             .city("Riyadh")
@@ -87,13 +140,17 @@ public class DataLoader {
             .imageUrl("https://example.com/images/shops/digital-bazaar.jpg")
             .openTime("09:00")
             .closeTime("22:00")
-            .workStatus("open")
+            .workStatus("OPEN")
             .contact(digitalBazaarContact)
             .location(riyadhLocation)
+            .active(true)
+            .rating(4.5)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Shop techHub = shopRepository.save(Shop.builder()
-            .id("shop_23456")
+            .id(23456L)
             .name("Tech Hub")
             .description("Your one-stop shop for all tech gadgets and accessories.")
             .city("Jeddah")
@@ -101,13 +158,17 @@ public class DataLoader {
             .imageUrl("https://example.com/images/shops/tech-hub.jpg")
             .openTime("08:00")
             .closeTime("21:00")
-            .workStatus("open")
+            .workStatus("OPEN")
             .contact(techHubContact)
             .location(jeddahLocation)
+            .active(true)
+            .rating(4.8)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
         Shop gadgetWorld = shopRepository.save(Shop.builder()
-            .id("shop_34567")
+            .id(34567L)
             .name("Gadget World")
             .description("Premium electronics and smart home devices.")
             .city("Dammam")
@@ -115,55 +176,29 @@ public class DataLoader {
             .imageUrl("https://example.com/images/shops/gadget-world.jpg")
             .openTime("10:00")
             .closeTime("23:00")
-            .workStatus("closed")
+            .workStatus("CLOSED")
             .contact(gadgetWorldContact)
             .location(dammamLocation)
+            .active(true)
+            .rating(4.2)
+            .createdAt(currentTime)
+            .updatedAt(currentTime)
             .build());
 
-        // Create and save banks for each shop
-        List<Bank> digitalBazaarBanks = Arrays.asList(
-            Bank.builder()
-                .name("Al Rajhi Bank")
-                .imageUrl("https://example.com/banks/al-rajhi.png")
-                .shop(digitalBazaar)
-                .build(),
-            Bank.builder()
-                .name("SNB")
-                .imageUrl("https://example.com/banks/snb.png")
-                .shop(digitalBazaar)
-                .build()
-        );
-        bankRepository.saveAll(digitalBazaarBanks);
+        // Create and save bank relationships
+        alRajhiBank.setShops(new HashSet<>(Arrays.asList(digitalBazaar, techHub)));
+        snbBank.setShops(new HashSet<>(Arrays.asList(digitalBazaar, techHub)));
+        alinmaBank.setShops(new HashSet<>(Arrays.asList(digitalBazaar, techHub)));
+        alBiladBank.setShops(new HashSet<>(Arrays.asList(digitalBazaar, techHub,gadgetWorld))); 
 
-        List<Bank> techHubBanks = Arrays.asList(
-            Bank.builder()
-                .name("Alinma Bank")
-                .imageUrl("https://example.com/banks/alinma.png")
-                .shop(techHub)
-                .build(),
-            Bank.builder()
-                .name("Al Rajhi Bank")
-                .imageUrl("https://example.com/banks/al-rajhi.png")
-                .shop(techHub)
-                .build()
-        );
-        bankRepository.saveAll(techHubBanks);
+        digitalBazaar.setBanks(new HashSet<>(Arrays.asList(alRajhiBank, snbBank, alinmaBank, alBiladBank)));
+        techHub.setBanks(new HashSet<>(Arrays.asList(alRajhiBank, snbBank, alinmaBank, alBiladBank)));
+        gadgetWorld.setBanks(new HashSet<>(Arrays.asList(alBiladBank)));
 
-        List<Bank> gadgetWorldBanks = Arrays.asList(
-            Bank.builder()
-                .name("SNB")
-                .imageUrl("https://example.com/banks/snb.png")
-                .shop(gadgetWorld)
-                .build(),
-            Bank.builder()
-                .name("Al Bilad Bank")
-                .imageUrl("https://example.com/banks/albilad.png")
-                .shop(gadgetWorld)
-                .build()
-        );
-        bankRepository.saveAll(gadgetWorldBanks);
+        bankRepository.saveAll(Arrays.asList(alRajhiBank, snbBank, alinmaBank, alBiladBank));
 
-        return "success";
+        shopRepository.saveAll(Arrays.asList(digitalBazaar, techHub, gadgetWorld));
 
+        return "Test data loaded successfully";
     }
 }

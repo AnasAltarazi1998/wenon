@@ -5,18 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopDto {
-    private String id;
+    private Long id;
     private String name;
     private String description;
     private String city;
     private String category;
     private String imageUrl;
-    private List<BankDto> banks;
+    private Set<BankDto> banks;
     private String openTime;
     private String closeTime;
     private String workStatus;

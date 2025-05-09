@@ -1,0 +1,363 @@
+{
+  "info": {
+    "name": "Shop API Collection",
+    "description": "Collection of all endpoints for the Shop API including admin and user operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Shop Management",
+      "item": [
+        {
+          "name": "Get All Shops",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shops"]
+            }
+          }
+        },
+        {
+          "name": "Get Shop by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops/{{shopId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shops", "{{shopId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Shops by City",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops/city/{{city}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shops", "city", "{{city}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Shops by Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops/category/{{category}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shops", "category", "{{category}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Shops by Work Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops/status/{{workStatus}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "shops", "status", "{{workStatus}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Operations",
+      "item": [
+        {
+          "name": "Create Shop",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Shop\",\n    \"address\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"category\": \"RETAIL\",\n    \"workStatus\": \"OPEN\",\n    \"banks\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/shops",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "shops"]
+            }
+          }
+        },
+        {
+          "name": "Update Shop",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Shop\",\n    \"address\": \"456 New St\",\n    \"city\": \"Los Angeles\",\n    \"category\": \"RETAIL\",\n    \"workStatus\": \"OPEN\",\n    \"banks\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/shops/{{shopId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "shops", "{{shopId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Shop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/shops/{{shopId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "shops", "{{shopId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Shop Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/shops/{{shopId}}/status?workStatus=CLOSED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "shops", "{{shopId}}", "status"],
+              "query": [
+                {
+                  "key": "workStatus",
+                  "value": "CLOSED"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Shops",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/shops/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "shops", "pending"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bank Management",
+      "item": [
+        {
+          "name": "Create Bank",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Bank\",\n    \"bankCode\": \"BANK123\",\n    \"swiftCode\": \"BANKUS33\",\n    \"country\": \"US\",\n    \"address\": \"789 Bank St\",\n    \"phoneNumber\": \"+1234567890\",\n    \"email\": \"contact@newbank.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/banks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "banks"]
+            }
+          }
+        },
+        {
+          "name": "Get All Banks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/banks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "banks"]
+            }
+          }
+        },
+        {
+          "name": "Get Bank by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/banks/{{bankId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "banks", "{{bankId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Bank",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Bank\",\n    \"bankCode\": \"BANK123\",\n    \"swiftCode\": \"BANKUS33\",\n    \"country\": \"US\",\n    \"address\": \"789 Updated Bank St\",\n    \"phoneNumber\": \"+1234567890\",\n    \"email\": \"contact@updatedbank.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/banks/{{bankId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "banks", "{{bankId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Bank",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Basic {{basicAuth}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/banks/{{bankId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "banks", "{{bankId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+} 

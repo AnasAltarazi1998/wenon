@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContactDto {
+    private Long id;
     private String phone;
     private String whatsapp;
     private String instagram;
