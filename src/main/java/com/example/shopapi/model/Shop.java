@@ -19,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 
 @Data
 @Builder
@@ -55,6 +56,11 @@ public class Shop {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
+    
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+    
     private boolean active;
     private Double rating;
     private String createdAt;

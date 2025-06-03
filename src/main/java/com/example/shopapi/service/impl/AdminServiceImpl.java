@@ -89,6 +89,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public ShopDto getShopById(Long id) {
+        log.info("Getting shop by id: {}", id);
+        return shopRepository.findById(id)
+                .map(shopMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + id));
+    }
+
+    @Override
     @Transactional
     public ShopDto updateShopLocation(Long id, LocationDto locationDto) {
         log.info("Updating shop location for id: {}", id);
@@ -114,7 +122,6 @@ public class AdminServiceImpl implements AdminService {
         log.info("Updating shop banks for id: {}", id);
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + id));
-//        Set<Bank> banks = bankMapper.toEntity(bankDtos);
         Set<Bank> banks = new HashSet<>(bankRepository.findAllById(bankDtos.stream().map(BankDto::getId).collect(Collectors.toSet())));
         shop.setBanks(banks);
         banks.forEach(bank -> bank.getShops().add(shop));
@@ -148,8 +155,6 @@ public class AdminServiceImpl implements AdminService {
     public BankDto createBank(BankDto bankDto) {
         log.info("Creating new bank: {}", bankDto.getName());
         
-
-
         Bank bank = bankMapper.toEntity(bankDto);
         
         // Set initial values
@@ -179,22 +184,21 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @Transactional
     public BankDto updateBank(Long id, BankDto bankDto) {
         log.info("Updating bank with id: {}", id);
         Bank bank = bankRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bank not found with id: " + id));
-        
+                .orElseThrow(() -> new ResourceNotFoundException("Bank not found with id: " + id));
         bankMapper.updateEntityFromDto(bankDto, bank);
         bank.setUpdatedAt(LocalDateTime.now().toString());
-        Bank updatedBank = bankRepository.save(bank);
-        return bankMapper.toDto(updatedBank);
+        return bankMapper.toDto(bankRepository.save(bank));
     }
 
     @Override
     public BankDto getBank(Long id) {
         log.info("Getting bank with id: {}", id);
-        return bankMapper.toDto(bankRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bank not found with id: " + id)));
+        return bankRepository.findById(id)
+                .map(bankMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Bank not found with id: " + id));
     }
-
 } 

@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     @PutMapping("/shops/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SHOP_OWNER')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<ShopDto> updateShop(@PathVariable Long id, @RequestBody ShopDto shopDto) {
         log.info("Received request to update shop with id: {}", id);
         return ResponseEntity.ok(adminService.updateShop(id, shopDto));
@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @PatchMapping("/shops/{id}/status")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SHOP_OWNER')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<ShopDto> updateShopStatus(@PathVariable Long id, @RequestParam String workStatus) {
         log.info("Received request to update shop status for id: {} to: {}", id, workStatus);
         return ResponseEntity.ok(adminService.updateShopStatus(id, workStatus));
@@ -61,30 +61,28 @@ public class AdminController {
     }
 
     @PutMapping("/shops/{id}/location")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<ShopDto> updateShopLocation(@PathVariable Long id, @RequestBody LocationDto locationDto) {
         log.info("Received request to update shop location for id: {}", id);
         return ResponseEntity.ok(adminService.updateShopLocation(id, locationDto));
     }
 
-    //contact
     @PutMapping("/shops/{id}/contact")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<ShopDto> updateShopContact(@PathVariable Long id, @RequestBody ContactDto contactDto) {
         log.info("Received request to update shop contact for id: {}", id);
         return ResponseEntity.ok(adminService.updateShopContact(id, contactDto));
     }
 
-    //shops/{id}/banks
     @PutMapping("/shops/{id}/banks")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<Set<BankDto>> createBank(@PathVariable Long id, @RequestBody Set<BankDto> bankDtos) {
         log.info("Received request to create new bank for shop with id: {}", id);
         return ResponseEntity.ok(adminService.updateShopBanks(id, bankDtos));
     }
 
     @DeleteMapping("/shops/{id}/banks")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<Set<BankDto>> deleteBank(@PathVariable Long id, @RequestBody Set<BankDto> bankDtos) {
         log.info("Received request to delete bank for shop with id: {}", id);
         return ResponseEntity.ok(adminService.deleteShopBanks(id, bankDtos));
@@ -125,5 +123,4 @@ public class AdminController {
         log.info("Received request to get bank with id: {}", id);
         return ResponseEntity.ok(adminService.getBank(id));
     }
-
 } 

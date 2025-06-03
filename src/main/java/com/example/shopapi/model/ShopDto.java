@@ -23,4 +23,22 @@ public class ShopDto {
     private String workStatus;
     private ContactDto contact;
     private LocationDto location;
+    private UserDto owner;
+
+    public ShopDto(Long id, String name, String description, String city, String category, String imageUrl,
+                  Set<BankDto> banks, String openTime, String closeTime, String workStatus,
+                  ContactDto contact, LocationDto location) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.city = city;
+        this.category = category;
+        this.imageUrl = imageUrl;
+        this.banks = banks;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.workStatus = workStatus;
+        this.contact = contact;
+        this.location = location;
+    }
 }

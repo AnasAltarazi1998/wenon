@@ -28,7 +28,7 @@ public class ShopController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('SHOP_OWNER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @shopService.getShopById(#id).owner.username == authentication.name)")
     public ResponseEntity<ShopDto> getShopById(@PathVariable Long id) {
         log.info("Received request to get shop by id: {}", id);
         return ResponseEntity.ok(shopService.getShopById(id));

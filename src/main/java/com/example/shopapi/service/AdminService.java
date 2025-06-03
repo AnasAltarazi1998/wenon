@@ -14,6 +14,7 @@ public interface AdminService {
     void deleteShop(Long id);
     ShopDto updateShopStatus(Long id, String workStatus);
     List<ShopDto> getPendingShops();
+    ShopDto getShopById(Long id);
     
     // Bank management methods
     BankDto createBank(BankDto bankDto);
