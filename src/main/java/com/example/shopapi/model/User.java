@@ -7,12 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,7 @@ public class User {
     private UserRole role;
     
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Shop> shops;
     
     private boolean active;

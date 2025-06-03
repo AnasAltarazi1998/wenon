@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -27,6 +31,7 @@ import jakarta.persistence.ManyToOne;
 @AllArgsConstructor
 @Entity
 @Table(name = "shops")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +64,7 @@ public class Shop {
     
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @JsonBackReference
     private User owner;
     
     private boolean active;
