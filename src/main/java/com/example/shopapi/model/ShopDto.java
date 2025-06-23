@@ -23,7 +23,7 @@ public class ShopDto {
     private String workStatus;
     private ContactDto contact;
     private LocationDto location;
-    private UserDto owner;
+    private String owner;
 
     public ShopDto(Long id, String name, String description, String city, String category, String imageUrl,
                   Set<BankDto> banks, String openTime, String closeTime, String workStatus,

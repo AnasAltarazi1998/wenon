@@ -44,10 +44,11 @@ public class SecurityConfig {
                                "/webjars/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/shops/**").authenticated()
+                .requestMatchers("/api/contact-us/**").authenticated()
                 .anyRequest().permitAll()
             )
             .httpBasic(basic -> {});
-        
+
         return http.build();    
     }
 
@@ -56,7 +57,7 @@ public class SecurityConfig {
         return username -> {
             User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-            
+
             return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),

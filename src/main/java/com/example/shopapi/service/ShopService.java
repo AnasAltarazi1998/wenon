@@ -62,10 +62,16 @@ public class ShopService {
     }
 
     public ShopDto convertToDto(Shop shop) {
-        return modelMapper.map(shop, ShopDto.class);
+        if (shop == null) {
+            return null;
+        }
+        return shopMapper.toDto(shop);
     }
 
     public Shop convertToEntity(ShopDto shopDto) {
-        return modelMapper.map(shopDto, Shop.class);
+        if (shopDto == null) {
+            return null;
+        }
+        return shopMapper.toEntity(shopDto);
     }
 }

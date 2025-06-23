@@ -26,13 +26,13 @@ public class OpenApiConfig {
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("http://www.apache.org/licenses/LICENSE-2.0.html")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .addSecurityItem(new SecurityRequirement().addList("basicAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
+                        .addSecuritySchemes("basicAuth",
                                 new SecurityScheme()
-                                        .name("bearerAuth")
+                                        .name("basicAuth")
                                         .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+                                        .scheme("basic")
+                                        .bearerFormat("BASIC")));
     }
 } 

@@ -5,14 +5,19 @@ import com.example.shopapi.exception.ResourceNotFoundException;
 import com.example.shopapi.mapper.BankMapper;
 import com.example.shopapi.mapper.ContactMapper;
 import com.example.shopapi.mapper.LocationMapper;
+import com.example.shopapi.mapper.UserMapper;
 import com.example.shopapi.model.Shop;
 import com.example.shopapi.model.ShopDto;
 import com.example.shopapi.model.Bank;
 import com.example.shopapi.model.BankDto;
+import com.example.shopapi.model.Contact;
 import com.example.shopapi.model.ContactDto;
+import com.example.shopapi.model.Location;
 import com.example.shopapi.model.LocationDto;
+import com.example.shopapi.model.User;
 import com.example.shopapi.repository.ShopRepository;
 import com.example.shopapi.repository.BankRepository;
+import com.example.shopapi.repository.UserRepository;
 import com.example.shopapi.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +41,30 @@ public class AdminServiceImpl implements AdminService {
     private final BankMapper bankMapper;
     private final LocationMapper locationMapper;
     private final ContactMapper contactMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional
     public ShopDto createShop(ShopDto shopDto) {
         log.info("Creating new shop: {}", shopDto);
+
+        // Set default values if not provided
+        if (shopDto.getBanks() == null) {
+            shopDto.setBanks(new HashSet<>());
+        }
+
+        if (shopDto.getWorkStatus() == null) {
+            shopDto.setWorkStatus("PENDING");
+        }
+
         Shop shop = shopMapper.toEntity(shopDto);
+
+        // Set initial values
+        shop.setActive(true);
+        shop.setCreatedAt(LocalDateTime.now().toString());
+        shop.setUpdatedAt(LocalDateTime.now().toString());
+
         return shopMapper.toDto(shopRepository.save(shop));
     }
 
@@ -134,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public Set<BankDto> deleteShopBanks(Long id, Set<BankDto> bankDtos) {
         log.info("Deleting shop banks for id: {}", id);
-        
+
         Shop shop = shopRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + id));
        if(bankDtos.isEmpty()) {
@@ -154,9 +177,9 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public BankDto createBank(BankDto bankDto) {
         log.info("Creating new bank: {}", bankDto.getName());
-        
+
         Bank bank = bankMapper.toEntity(bankDto);
-        
+
         // Set initial values
         bank.setActive(true);
         bank.setStatus("ACTIVE");
@@ -165,7 +188,7 @@ public class AdminServiceImpl implements AdminService {
 
         Bank savedBank = bankRepository.save(bank);
         log.info("Successfully created bank with id: {}", savedBank.getId());
-        
+
         return bankMapper.toDto(savedBank);
     }
 
@@ -200,5 +223,96 @@ public class AdminServiceImpl implements AdminService {
         return bankRepository.findById(id)
                 .map(bankMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Bank not found with id: " + id));
+    }
+
+    @Override
+    @Transactional
+    public ShopDto addShopToUser(Long userId, Long shopId) {
+        log.info("Adding shop with id: {} to user with id: {}", shopId, userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + shopId));
+
+        shop.setOwner(user);
+        shop.setUpdatedAt(LocalDateTime.now().toString());
+
+        if (user.getShops() == null) {
+            user.setShops(new HashSet<>());
+        }
+        user.getShops().add(shop);
+
+        shopRepository.save(shop);
+        userRepository.save(user);
+
+        return shopMapper.toDto(shop);
+    }
+
+    @Override
+    @Transactional
+    public BankDto addBankToShop(Long shopId, Long bankId) {
+        log.info("Adding bank with id: {} to shop with id: {}", bankId, shopId);
+
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + shopId));
+
+        Bank bank = bankRepository.findById(bankId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bank not found with id: " + bankId));
+
+        if (shop.getBanks() == null) {
+            shop.setBanks(new HashSet<>());
+        }
+        shop.getBanks().add(bank);
+
+        if (bank.getShops() == null) {
+            bank.setShops(new HashSet<>());
+        }
+        bank.getShops().add(shop);
+
+        shop.setUpdatedAt(LocalDateTime.now().toString());
+        bank.setUpdatedAt(LocalDateTime.now().toString());
+
+        shopRepository.save(shop);
+        bankRepository.save(bank);
+
+        return bankMapper.toDto(bank);
+    }
+
+    @Override
+    @Transactional
+    public ShopDto addContactToShop(Long shopId, ContactDto contactDto) {
+        log.info("Adding contact to shop with id: {}", shopId);
+
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + shopId));
+
+        Contact contact = contactMapper.toEntity(contactDto);
+        contact.setCreatedAt(LocalDateTime.now().toString());
+        contact.setUpdatedAt(LocalDateTime.now().toString());
+
+        shop.setContact(contact);
+        shop.setUpdatedAt(LocalDateTime.now().toString());
+
+        return shopMapper.toDto(shopRepository.save(shop));
+    }
+
+    @Override
+    @Transactional
+    public ShopDto addLocationToShop(Long shopId, LocationDto locationDto) {
+        log.info("Adding location to shop with id: {}", shopId);
+
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shop not found with id: " + shopId));
+
+        Location location = locationMapper.toEntity(locationDto);
+        location.setCreatedAt(LocalDateTime.now().toString());
+        location.setUpdatedAt(LocalDateTime.now().toString());
+
+        shop.setLocation(location);
+        shop.setUpdatedAt(LocalDateTime.now().toString());
+
+        return shopMapper.toDto(shopRepository.save(shop));
     }
 } 

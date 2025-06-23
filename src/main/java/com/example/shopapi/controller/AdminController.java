@@ -116,11 +116,25 @@ public class AdminController {
         log.info("Received request to update bank with id: {}", id);
         return ResponseEntity.ok(adminService.updateBank(id, bankDto));
     }
-    
+
     @GetMapping("/banks/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BankDto> getBank(@PathVariable Long id) {
         log.info("Received request to get bank with id: {}", id);
         return ResponseEntity.ok(adminService.getBank(id));
     }
-} 
+
+    @PostMapping("/users/{userId}/shops/{shopId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ShopDto> addShopToUser(@PathVariable Long userId, @PathVariable Long shopId) {
+        log.info("Received request to add shop with id: {} to user with id: {}", shopId, userId);
+        return ResponseEntity.ok(adminService.addShopToUser(userId, shopId));
+    }
+
+    @PostMapping("/shops/{shopId}/banks/{bankId}")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('SHOP_OWNER') and @adminService.getShopById(#shopId).owner.username == authentication.name)")
+    public ResponseEntity<BankDto> addBankToShop(@PathVariable Long shopId, @PathVariable Long bankId) {
+        log.info("Received request to add bank with id: {} to shop with id: {}", bankId, shopId);
+        return ResponseEntity.ok(adminService.addBankToShop(shopId, bankId));
+    }
+}
