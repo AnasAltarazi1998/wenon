@@ -24,6 +24,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Builder
@@ -69,7 +71,9 @@ public class Shop {
     
     private boolean active;
     private Double rating;
+    @CreationTimestamp
     private String createdAt;
+    @UpdateTimestamp
     private String updatedAt;
 
     @Override

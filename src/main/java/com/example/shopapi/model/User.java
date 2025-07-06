@@ -10,6 +10,8 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Builder
@@ -38,7 +40,9 @@ public class User {
     private Set<Shop> shops;
     
     private boolean active;
+    @CreationTimestamp
     private String createdAt;
+    @UpdateTimestamp
     private String updatedAt;
 
     @Override

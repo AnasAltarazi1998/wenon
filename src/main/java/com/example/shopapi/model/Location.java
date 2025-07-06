@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Builder
@@ -19,7 +21,9 @@ public class Location {
     
     private double lat;
     private double lng;
+    @CreationTimestamp
     private String createdAt;
+    @UpdateTimestamp
     private String updatedAt;
 }
 

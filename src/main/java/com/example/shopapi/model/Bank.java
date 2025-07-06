@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.util.Set;
 
 @Data
@@ -23,7 +26,9 @@ public class Bank {
 
     private boolean active;
     private String status;
+    @CreationTimestamp
     private String createdAt;
+    @UpdateTimestamp
     private String updatedAt;
 
     @ManyToMany(mappedBy = "banks")

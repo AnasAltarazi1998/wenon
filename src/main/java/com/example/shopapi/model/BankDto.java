@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Builder
@@ -22,6 +24,8 @@ public class BankDto {
     private String imageUrl;
     private boolean active;
     private String status;
+    @CreationTimestamp
     private String createdAt;
+    @UpdateTimestamp
     private String updatedAt;
 }
