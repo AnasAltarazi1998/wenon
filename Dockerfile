@@ -11,6 +11,7 @@ RUN ./mvnw clean package -DskipTests
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
+RUN mkdir
 # Copy the built JAR
 COPY --from=builder /app/target/*.jar app.jar
 
