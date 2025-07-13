@@ -43,8 +43,10 @@ public class SecurityConfig {
                                "/swagger-resources/**",
                                "/webjars/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/images/{name}").permitAll()
                 .requestMatchers("/api/shops/**").authenticated()
                 .requestMatchers("/api/contact-us/**").authenticated()
+                .requestMatchers("/api/images/**").authenticated()
                 .anyRequest().permitAll()
             )
             .httpBasic(basic -> {});
